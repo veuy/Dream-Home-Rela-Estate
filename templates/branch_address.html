@@ -1,29 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Branch Address Lookup - Dream Home Real Estate</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
-        h1 { color: #2c3e50; }
-        form { background: white; padding: 20px; border-radius: 8px; max-width: 400px; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input { width: 100%; padding: 6px; margin-top: 4px; box-sizing: border-box; }
-        button { margin-top: 20px; padding: 10px 20px; border: 2px solid black; background: #eee; cursor: pointer; }
-        .result { padding: 12px; margin-top: 15px; background: #dff0d8; border: 1px solid #3c763d; max-width: 400px; font-size: 18px; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Branch Address Lookup</h1>
-    <a href="/">&larr; Back to Main Menu</a>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="/">
+                <span class="brand-mark">DH</span>
+                <span>Dream Home Real Estate</span>
+            </a>
+            <nav class="main-nav">
+                <div class="nav-group">
+                    <span class="nav-label">Staff</span>
+                    <a href="/staff/hire">Hire</a>
+                    <a href="/staff/list">List / Update</a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-label">Branch</span>
+                    <a href="/branch/address" class="active">Address</a>
+                    <a href="/branch/list">List / Update</a>
+                    <a href="/branch/new">New Branch</a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-label">Client</span>
+                    <a href="/client/register">Register</a>
+                    <a href="/client/list">List / Update</a>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-    <form method="POST" action="/branch/address">
-        <label>Branch No</label>
-        <input type="text" name="branchno" value="{{ searched_branchno or '' }}" required>
-        <button type="submit">Look Up</button>
-    </form>
+    <main class="container">
+        <div class="page-head">
+            <h1 class="page-title">Branch Address Lookup</h1>
+            <p class="page-subtitle">Find a branch's street address and city.</p>
+        </div>
 
-    {% if address %}
-    <div class="result">Address: {{ address }}</div>
-    {% endif %}
+        <form class="form-card" method="POST" action="/branch/address">
+            <label>Branch No</label>
+            <input type="text" name="branchno" value="{{ searched_branchno or '' }}" required>
+            <button class="btn btn-gold" type="submit">Look Up</button>
+        </form>
+
+        {% if address %}
+        <div class="result">Address: {{ address }}</div>
+        {% endif %}
+    </main>
+
+    <footer class="page-footer">
+        &copy; Dream Home Real Estate &mdash; Internal Admin Tool
+    </footer>
 </body>
 </html>

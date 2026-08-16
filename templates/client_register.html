@@ -1,84 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Client - Dream Home Real Estate</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
-        h1 { color: #2c3e50; }
-        form { background: white; padding: 20px; border-radius: 8px; max-width: 400px; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input, select { width: 100%; padding: 6px; margin-top: 4px; box-sizing: border-box; }
-        button { margin-top: 20px; padding: 10px 20px; border: 2px solid black; background: #eee; cursor: pointer; }
-        .message { padding: 10px; margin-top: 15px; background: #dff0d8; border: 1px solid #3c763d; max-width: 400px; }
-        table { border-collapse: collapse; margin-top: 30px; width: 100%; max-width: 900px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background: #2c3e50; color: white; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Register New Client</h1>
-    <a href="/">&larr; Back to Main Menu</a>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="/">
+                <span class="brand-mark">DH</span>
+                <span>Dream Home Real Estate</span>
+            </a>
+            <nav class="main-nav">
+                <div class="nav-group">
+                    <span class="nav-label">Staff</span>
+                    <a href="/staff/hire">Hire</a>
+                    <a href="/staff/list">List / Update</a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-label">Branch</span>
+                    <a href="/branch/address">Address</a>
+                    <a href="/branch/list">List / Update</a>
+                    <a href="/branch/new">New Branch</a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-label">Client</span>
+                    <a href="/client/register" class="active">Register</a>
+                    <a href="/client/list">List / Update</a>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-    <form method="POST" action="/client/register">
-        <label>Client No</label>
-        <input type="text" name="clientno" required>
+    <main class="container">
+        <div class="page-head">
+            <h1 class="page-title">Register New Client</h1>
+            <p class="page-subtitle">Add a new client record.</p>
+        </div>
 
-        <label>First Name</label>
-        <input type="text" name="fname" required>
+        <form class="form-card" method="POST" action="/client/register">
+            <label>Client No</label>
+            <input type="text" name="clientno" required>
 
-        <label>Last Name</label>
-        <input type="text" name="lname" required>
+            <label>First Name</label>
+            <input type="text" name="fname" required>
 
-        <label>Telephone</label>
-        <input type="text" name="telno" required>
+            <label>Last Name</label>
+            <input type="text" name="lname" required>
 
-        <label>Street</label>
-        <input type="text" name="street">
+            <label>Telephone</label>
+            <input type="text" name="telno" required>
 
-        <label>City</label>
-        <input type="text" name="city">
+            <label>Street</label>
+            <input type="text" name="street">
 
-        <label>Email</label>
-        <input type="email" name="email">
+            <label>City</label>
+            <input type="text" name="city">
 
-        <label>Preferred Type</label>
-        <select name="preftype">
-            <option value="Flat">Flat</option>
-            <option value="House">House</option>
-        </select>
+            <label>Email</label>
+            <input type="email" name="email">
 
-        <label>Max Rent</label>
-        <input type="number" name="maxrent" step="0.01">
+            <label>Preferred Type</label>
+            <select name="preftype">
+                <option value="Flat">Flat</option>
+                <option value="House">House</option>
+            </select>
 
-        <button type="submit">Register</button>
-    </form>
+            <label>Max Rent</label>
+            <input type="number" name="maxrent" step="0.01">
 
-    {% if message %}
-    <div class="message">{{ message }}</div>
-    {% endif %}
+            <button class="btn btn-gold" type="submit">Register</button>
+        </form>
 
-    <h2>Current Clients</h2>
-    <table>
-        <tr>
-            <th>Client No</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Telephone</th>
-            <th>City</th>
-            <th>Pref Type</th>
-            <th>Max Rent</th>
-        </tr>
-        {% for row in client_list %}
-        <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[2] }}</td>
-            <td>{{ row[3] }}</td>
-            <td>{{ row[5] }}</td>
-            <td>{{ row[7] }}</td>
-            <td>{{ row[8] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+        {% if message %}
+        <div class="message">{{ message }}</div>
+        {% endif %}
+
+        <h2>Current Clients</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client No</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Telephone</th>
+                        <th>City</th>
+                        <th>Pref Type</th>
+                        <th>Max Rent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in client_list %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[5] }}</td>
+                        <td>{{ row[7] }}</td>
+                        <td>{{ row[8] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        &copy; Dream Home Real Estate &mdash; Internal Admin Tool
+    </footer>
 </body>
 </html>

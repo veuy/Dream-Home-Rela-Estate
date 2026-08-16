@@ -7,18 +7,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return """
-    <h1>Dream Home Real Estate</h1>
-    <ul>
-        <li><a href='/staff/hire'>Staff Hiring</a></li>
-        <li><a href='/staff/list'>Staff List / Update</a></li>
-        <li><a href='/branch/address'>Branch Address Lookup</a></li>
-        <li><a href='/branch/list'>Branch List / Update</a></li>
-        <li><a href='/branch/new'>Open New Branch</a></li>
-        <li><a href='/client/register'>Register New Client</a></li>
-        <li><a href='/client/list'>Client List / Update</a></li>
-    </ul>
-    """
+    return render_template("home.html")
 
 
 @app.route("/staff/hire", methods=["GET", "POST"])

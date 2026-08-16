@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Dream Home Real Estate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="/">
+                <span class="brand-mark">DH</span>
+                <span>Dream Home Real Estate</span>
+            </a>
+            <nav class="main-nav">
+                <div class="nav-group">
+                    <span class="nav-label">Staff</span>
+                    <a href="/staff/hire">Hire</a>
+                    <a href="/staff/list">List / Update</a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-label">Branch</span>
+                    <a href="/branch/address">Address</a>
+                    <a href="/branch/list">List / Update</a>
+                    <a href="/branch/new">New Branch</a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-label">Client</span>
+                    <a href="/client/register">Register</a>
+                    <a href="/client/list">List / Update</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-head">
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Manage staff, branches, and clients from one place.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="section-group">
+                <h2 class="section-title">Staff</h2>
+            </div>
+
+            <a class="card" href="/staff/hire">
+                <div class="card-icon">&#128100;</div>
+                <h3 class="card-title">Hire Staff</h3>
+                <p class="card-desc">Add a new staff member to the team.</p>
+                <span class="card-arrow">Open &rarr;</span>
+            </a>
+
+            <a class="card" href="/staff/list">
+                <div class="card-icon">&#128221;</div>
+                <h3 class="card-title">Staff List / Update</h3>
+                <p class="card-desc">View and edit salary, telephone, and email.</p>
+                <span class="card-arrow">Open &rarr;</span>
+            </a>
+
+            <div class="section-group">
+                <h2 class="section-title">Branch</h2>
+            </div>
+
+            <a class="card" href="/branch/address">
+                <div class="card-icon">&#128205;</div>
+                <h3 class="card-title">Branch Address Lookup</h3>
+                <p class="card-desc">Find a branch's street address and city.</p>
+                <span class="card-arrow">Open &rarr;</span>
+            </a>
+
+            <a class="card" href="/branch/list">
+                <div class="card-icon">&#127970;</div>
+                <h3 class="card-title">Branch List / Update</h3>
+                <p class="card-desc">Edit branch street, city, and postcode.</p>
+                <span class="card-arrow">Open &rarr;</span>
+            </a>
+
+            <a class="card" href="/branch/new">
+                <div class="card-icon">&#10133;</div>
+                <h3 class="card-title">Open New Branch</h3>
+                <p class="card-desc">Add a new branch location.</p>
+                <span class="card-arrow">Open &rarr;</span>
+            </a>
+
+            <div class="section-group">
+                <h2 class="section-title">Client</h2>
+            </div>
+
+            <a class="card" href="/client/register">
+                <div class="card-icon">&#128101;</div>
+                <h3 class="card-title">Register Client</h3>
+                <p class="card-desc">Add a new client record.</p>
+                <span class="card-arrow">Open &rarr;</span>
+            </a>
+
+            <a class="card" href="/client/list">
+                <div class="card-icon">&#128295;</div>
+                <h3 class="card-title">Client List / Update</h3>
+                <p class="card-desc">View and edit client details.</p>
+                <span class="card-arrow">Open &rarr;</span>
+            </a>
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        &copy; Dream Home Real Estate &mdash; Internal Admin Tool
+    </footer>
+</body>
+</html>
