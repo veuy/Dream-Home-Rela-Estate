@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from datetime import datetime
 import db
 
 app = Flask(__name__)
@@ -14,6 +15,8 @@ def home():
         <li><a href='/branch/address'>Branch Address Lookup</a></li>
         <li><a href='/branch/list'>Branch List / Update</a></li>
         <li><a href='/branch/new'>Open New Branch</a></li>
+        <li><a href='/client/register'>Register New Client</a></li>
+        <li><a href='/client/list'>Client List / Update</a></li>
     </ul>
     """
 
@@ -30,7 +33,8 @@ def staff_hire():
         p_lname = request.form["lname"]
         p_position = request.form["position"]
         p_sex = request.form["sex"]
-        p_dob = request.form["dob"]          # expects format YYYY-MM-DD
+        p_dob = request.form["dob"]          # comes in as "YYYY-MM-DD" from the HTML date input
+        p_dob = datetime.strptime(p_dob, "%Y-%m-%d")  # convert to a real date object for Oracle's DATE type
         p_salary = request.form["salary"]
         p_branchno = request.form["branchno"]
         p_telephone = request.form["telephone"]
@@ -228,6 +232,124 @@ def branch_new():
     connection.close()
 
     return render_template("branch_new.html", message=message, branch_list=branch_list)
+
+@app.route("/client/register", methods=["GET", "POST"])
+def client_register():
+    message = None
+
+    if request.method == "POST":
+        p_clientno = request.form["clientno"]
+        p_fname = request.form["fname"]
+        p_lname = request.form["lname"]
+        p_telno = request.form["telno"]
+        p_street = request.form["street"]
+        p_city = request.form["city"]
+        p_email = request.form["email"]
+        p_preftype = request.form["preftype"]
+        p_maxrent = request.form["maxrent"]
+
+        connection = db.get_connection()
+        try:
+            cursor = connection.cursor()
+            cursor.callproc("register_client_sp", [
+                p_clientno, p_fname, p_lname, p_telno,
+                p_street, p_city, p_email, p_preftype, p_maxrent
+            ])
+            connection.commit()
+            message = f"Client {p_fname} {p_lname} ({p_clientno}) registered successfully."
+        except Exception as e:
+            message = f"Error: {e}"
+        finally:
+            cursor.close()
+            connection.close()
+
+    connection = db.get_connection()
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT clientno, fname, lname, telno, street, city, email, preftype, maxrent
+        FROM dh_client
+        ORDER BY clientno
+    """)
+    client_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("client_register.html", message=message, client_list=client_list)
+
+
+@app.route("/client/list", methods=["GET"])
+def client_list_page():
+    connection = db.get_connection()
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT clientno, fname, lname, telno, street, city, email, preftype, maxrent
+        FROM dh_client
+        ORDER BY clientno
+    """)
+    client_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("client_list.html", client_list=client_list, message=None)
+
+
+@app.route("/client/update/<clientno>", methods=["POST"])
+def client_update(clientno):
+    new_fname = request.form["fname"]
+    new_lname = request.form["lname"]
+    new_telno = request.form["telno"]
+    new_street = request.form["street"]
+    new_city = request.form["city"]
+    new_email = request.form["email"]
+    new_preftype = request.form["preftype"]
+    new_maxrent = request.form["maxrent"]
+
+    connection = db.get_connection()
+    message = None
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            UPDATE dh_client
+            SET fname = :new_fname,
+                lname = :new_lname,
+                telno = :new_telno,
+                street = :new_street,
+                city = :new_city,
+                email = :new_email,
+                preftype = :new_preftype,
+                maxrent = :new_maxrent
+            WHERE clientno = :clientno
+        """, {
+            "new_fname": new_fname,
+            "new_lname": new_lname,
+            "new_telno": new_telno,
+            "new_street": new_street,
+            "new_city": new_city,
+            "new_email": new_email,
+            "new_preftype": new_preftype,
+            "new_maxrent": new_maxrent,
+            "clientno": clientno
+        })
+        connection.commit()
+        message = f"Client {clientno} updated successfully."
+    except Exception as e:
+        message = f"Error updating {clientno}: {e}"
+    finally:
+        cursor.close()
+        connection.close()
+
+    connection = db.get_connection()
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT clientno, fname, lname, telno, street, city, email, preftype, maxrent
+        FROM dh_client
+        ORDER BY clientno
+    """)
+    client_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("client_list.html", client_list=client_list, message=message)
 
 if __name__ == "__main__":
     app.run(debug=True)
