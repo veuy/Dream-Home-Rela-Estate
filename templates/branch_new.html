@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Open New Branch - Dream Home Real Estate</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        h1 { color: #2c3e50; }
+        form { background: white; padding: 20px; border-radius: 8px; max-width: 400px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input { width: 100%; padding: 6px; margin-top: 4px; box-sizing: border-box; }
+        button { margin-top: 20px; padding: 10px 20px; border: 2px solid black; background: #eee; cursor: pointer; }
+        .message { padding: 10px; margin-top: 15px; background: #dff0d8; border: 1px solid #3c763d; max-width: 400px; }
+        table { border-collapse: collapse; margin-top: 30px; width: 100%; max-width: 700px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #2c3e50; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Open New Branch</h1>
+    <a href="/">&larr; Back to Main Menu</a>
+
+    <form method="POST" action="/branch/new">
+        <label>Branch No</label>
+        <input type="text" name="branchno" required>
+
+        <label>Street</label>
+        <input type="text" name="street" required>
+
+        <label>City</label>
+        <input type="text" name="city" required>
+
+        <label>Postcode</label>
+        <input type="text" name="postcode" required>
+
+        <button type="submit">Open Branch</button>
+    </form>
+
+    {% if message %}
+    <div class="message">{{ message }}</div>
+    {% endif %}
+
+    <h2>Current Branches</h2>
+    <table>
+        <tr>
+            <th>Branch No</th>
+            <th>Street</th>
+            <th>City</th>
+            <th>Postcode</th>
+        </tr>
+        {% for row in branch_list %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

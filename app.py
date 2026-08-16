@@ -11,6 +11,9 @@ def home():
     <ul>
         <li><a href='/staff/hire'>Staff Hiring</a></li>
         <li><a href='/staff/list'>Staff List / Update</a></li>
+        <li><a href='/branch/address'>Branch Address Lookup</a></li>
+        <li><a href='/branch/list'>Branch List / Update</a></li>
+        <li><a href='/branch/new'>Open New Branch</a></li>
     </ul>
     """
 
@@ -118,6 +121,113 @@ def staff_update(staffno):
 
     return render_template("staff_list.html", staff_list=staff_list, message=message)
 
+
+
+@app.route("/branch/address", methods=["GET", "POST"])
+def branch_address():
+    address = None
+    searched_branchno = None
+
+    if request.method == "POST":
+        searched_branchno = request.form["branchno"]
+        connection = db.get_connection()
+        try:
+            cursor = connection.cursor()
+            # Calls the get_branch_address FUNCTION using a bind variable
+            # to receive its return value.
+            result = cursor.callfunc("get_branch_address", str, [searched_branchno])
+            address = result
+        except Exception as e:
+            address = f"Error: {e}"
+        finally:
+            cursor.close()
+            connection.close()
+
+    return render_template("branch_address.html", address=address, searched_branchno=searched_branchno)
+
+
+@app.route("/branch/list", methods=["GET"])
+def branch_list_page():
+    connection = db.get_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT branchno, street, city, postcode FROM dh_branch ORDER BY branchno")
+    branch_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("branch_list.html", branch_list=branch_list, message=None)
+
+
+@app.route("/branch/update/<branchno>", methods=["POST"])
+def branch_update(branchno):
+    new_street = request.form["street"]
+    new_city = request.form["city"]
+    new_postcode = request.form["postcode"]
+
+    connection = db.get_connection()
+    message = None
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            UPDATE dh_branch
+            SET street = :new_street,
+                city = :new_city,
+                postcode = :new_postcode
+            WHERE branchno = :branchno
+        """, {
+            "new_street": new_street,
+            "new_city": new_city,
+            "new_postcode": new_postcode,
+            "branchno": branchno
+        })
+        connection.commit()
+        message = f"Branch {branchno} updated successfully."
+    except Exception as e:
+        message = f"Error updating {branchno}: {e}"
+    finally:
+        cursor.close()
+        connection.close()
+
+    connection = db.get_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT branchno, street, city, postcode FROM dh_branch ORDER BY branchno")
+    branch_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("branch_list.html", branch_list=branch_list, message=message)
+
+
+@app.route("/branch/new", methods=["GET", "POST"])
+def branch_new():
+    message = None
+
+    if request.method == "POST":
+        p_branchno = request.form["branchno"]
+        p_street = request.form["street"]
+        p_city = request.form["city"]
+        p_postcode = request.form["postcode"]
+
+        connection = db.get_connection()
+        try:
+            cursor = connection.cursor()
+            cursor.callproc("new_branch", [p_branchno, p_street, p_city, p_postcode])
+            connection.commit()
+            message = f"Branch {p_branchno} opened successfully."
+        except Exception as e:
+            message = f"Error: {e}"
+        finally:
+            cursor.close()
+            connection.close()
+
+    connection = db.get_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT branchno, street, city, postcode FROM dh_branch ORDER BY branchno")
+    branch_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("branch_new.html", message=message, branch_list=branch_list)
 
 if __name__ == "__main__":
     app.run(debug=True)
