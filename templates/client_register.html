@@ -64,7 +64,7 @@
 
             <label>Preferred Type</label>
             <select name="preftype">
-                <option value="Flat">Flat</option>
+                <option value="Apartment">Apartment</option>
                 <option value="House">House</option>
             </select>
 
@@ -101,7 +101,7 @@
                         <td>{{ row[3] }}</td>
                         <td>{{ row[5] }}</td>
                         <td>{{ row[7] }}</td>
-                        <td>{{ row[8] }}</td>
+                        <td>${{ "{:,.2f}".format(row[8]) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

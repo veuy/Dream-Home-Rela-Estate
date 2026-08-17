@@ -72,11 +72,11 @@
                         <td><input type="email" name="email" form="form_{{ row[0] }}" value="{{ row[6] or '' }}"></td>
                         <td>
                             <select name="preftype" form="form_{{ row[0] }}">
-                                <option value="Flat" {% if row[7] == 'Flat' %}selected{% endif %}>Flat</option>
+                                <option value="Flat" {% if row[7] == 'Apartment' %}selected{% endif %}>Apartment</option>
                                 <option value="House" {% if row[7] == 'House' %}selected{% endif %}>House</option>
                             </select>
                         </td>
-                        <td><input type="number" step="0.01" name="maxrent" form="form_{{ row[0] }}" value="{{ row[8] }}"></td>
+                        <td><input type="number" step="0.01" name="maxrent" form="form_{{ row[8] }}" value="{{ '%.2f' | format(row[8] | float) }}"></td>
                         <td><button class="btn" type="submit" form="form_{{ row[0] }}">Save</button></td>
                     </tr>
                     {% endfor %}
