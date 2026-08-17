@@ -22,8 +22,10 @@ def staff_hire():
         p_lname = request.form["lname"]
         p_position = request.form["position"]
         p_sex = request.form["sex"]
-        p_dob = request.form["dob"]          # comes in as "YYYY-MM-DD" from the HTML date input
-        p_dob = datetime.strptime(p_dob, "%Y-%m-%d")  # convert to a real date object for Oracle's DATE type
+        p_dob = request.form["dob"]          
+        p_dob = datetime.strptime(p_dob, "%Y-%m-%d")  
+        p_hiredate = request.form["hiredate"]
+        p_hiredate = datetime.strptime(p_hiredate, "%Y-%m-%d")
         p_salary = request.form["salary"]
         p_branchno = request.form["branchno"]
         p_telephone = request.form["telephone"]
@@ -33,7 +35,7 @@ def staff_hire():
             cursor = connection.cursor()
             cursor.callproc("staff_hire_sp", [
                 p_staffno, p_fname, p_lname, p_position,
-                p_sex, p_dob, p_salary, p_branchno, p_telephone
+                p_sex, p_dob, p_hiredate, p_salary, p_branchno, p_telephone
             ])
             connection.commit()
             message = f"Staff member {p_fname} {p_lname} ({p_staffno}) hired successfully."
