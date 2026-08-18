@@ -72,7 +72,7 @@
                         <td><input type="email" name="email" form="form_{{ row[0] }}" value="{{ row[6] or '' }}"></td>
                         <td>
                             <select name="preftype" form="form_{{ row[0] }}">
-                                <option value="Flat" {% if row[7] == 'Apartment' %}selected{% endif %}>Apartment</option>
+                                <option value="Apartment" {% if row[7] == 'Apartment' %}selected{% endif %}>Apartment</option>
                                 <option value="House" {% if row[7] == 'House' %}selected{% endif %}>House</option>
                             </select>
                         </td>
